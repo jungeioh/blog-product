@@ -1,21 +1,22 @@
 /* main.js - 대박 로또 with Theme Support and Bonus Numbers */
 
 // Splash Overlay Control
-document.addEventListener('DOMContentLoaded', () => {
+const hideSplash = () => {
     const splash = document.getElementById('splash-overlay');
-    
-    // Hold for 2 seconds
-    setTimeout(() => {
-        if (splash) {
-            splash.classList.add('fade-out');
-            
-            // Wait for 1s transition to finish before display: none
-            setTimeout(() => {
-                splash.style.display = 'none';
-            }, 1000);
-        }
-    }, 2000);
-});
+    if (splash) {
+        splash.classList.add('fade-out');
+        setTimeout(() => {
+            splash.style.display = 'none';
+            splash.style.zIndex = '-1';
+        }, 1000);
+    }
+};
+
+// Remove splash after 3 seconds total regardless of window load
+setTimeout(hideSplash, 3000);
+
+// Also try on window load for safety
+window.addEventListener('load', hideSplash);
 
 const generateBtn = document.getElementById('generate-btn');
 const numbersContainer = document.getElementById('numbers-container');
