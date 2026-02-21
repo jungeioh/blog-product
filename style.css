@@ -303,19 +303,27 @@
         opacity: 0.5;
     }
 
-    #comment-section {
-        margin-top: 2rem;
-        padding: 2rem;
-        text-align: left;
-        background-color: rgb(30, 35, 45); /* Fallback RGB color for Disqus */
-        color: rgb(240, 240, 240);
-        border-radius: 12px;
+    .container {
+        width: 90vw;
+        max-width: 700px;
     }
 
-    [data-theme="light"] #comment-section {
-        background-color: rgb(250, 250, 250);
+    #comment-section {
+        width: 90vw;
+        max-width: 700px;
+        margin: 2rem auto;
+        padding: 2rem;
+        text-align: left;
+        background-color: rgb(255, 255, 255);
         color: rgb(40, 45, 55);
+        border-radius: 12px;
         border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    #comment-section h3 {
+        margin: 0 0 1rem 0;
+        font-family: var(--font-display);
+        color: rgb(40, 45, 55);
     }
 
     /* Mobile Responsiveness */
