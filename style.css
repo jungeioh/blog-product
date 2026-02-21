@@ -296,6 +296,19 @@
         box-shadow: 0 8px 20px var(--color-primary / 0.6);
     }
 
+    .divider {
+        height: 1px;
+        background: var(--container-border);
+        margin: 3rem 0;
+        opacity: 0.5;
+    }
+
+    #comment-section {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        text-align: left;
+    }
+
     /* Mobile Responsiveness */
     @media (max-width: 600px) {
         .container {
