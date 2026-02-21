@@ -137,7 +137,7 @@ inquiryForm.addEventListener('submit', (e) => {
     // Formspree handles the actual POST, we just add a small UI feedback
     setTimeout(() => {
         inquiryForm.reset();
-        alert('문의가 성공적으로 전송되었습니다. 감사합니다!');
+        alert('상담 신청이 정상적으로 접수되었습니다. 곧 풀이 결과를 전달해 드리겠습니다!');
     }, 1000);
 });
 
