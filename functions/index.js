@@ -1,6 +1,30 @@
 const functions = require("firebase-functions");
 const axios = require("axios");
 
+exports.getLottoResult = functions.https.onRequest(async (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Methods", "GET");
+
+  if (req.method === "OPTIONS") {
+    res.status(204).send("");
+    return;
+  }
+
+  const drwNo = req.query.drwNo;
+  if (!drwNo) {
+    res.status(400).json({error: "drwNo parameter is required"});
+    return;
+  }
+
+  try {
+    const url = `https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=${drwNo}`;
+    const response = await axios.get(url);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({error: error.message});
+  }
+});
+
 exports.recommendLotto = functions.https.onRequest(async (req, res) => {
   try {
     const maxDraw = 1160; // 최신 회차 번호 (필요시 수정)

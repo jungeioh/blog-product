@@ -20,13 +20,21 @@ const themeToggle = document.getElementById('theme-toggle');
 const sunIcon = document.getElementById('sun-icon');
 const moonIcon = document.getElementById('moon-icon');
 
-// Lotto Round Calculation
+// Lotto Round Calculation (based on Saturday 20:45 KST draw time)
 function getCurrentRound() {
-    const firstDrawDate = new Date('2002-12-07T20:00:00');
+    const firstDraw = new Date('2002-12-07T20:45:00+09:00');
     const now = new Date();
-    const diffTime = Math.abs(now - firstDrawDate);
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    return Math.floor(diffDays / 7) + 1;
+    const msPerWeek = 7 * 24 * 60 * 60 * 1000;
+    const elapsed = now.getTime() - firstDraw.getTime();
+    return Math.floor(elapsed / msPerWeek) + 2;
+}
+
+function getLastDrawnRound() {
+    const firstDraw = new Date('2002-12-07T20:45:00+09:00');
+    const now = new Date();
+    const msPerWeek = 7 * 24 * 60 * 60 * 1000;
+    const elapsed = now.getTime() - firstDraw.getTime();
+    return Math.floor(elapsed / msPerWeek) + 1;
 }
 
 const currentRound = getCurrentRound();
@@ -321,3 +329,130 @@ function generateFaceLottoRows(seed) {
     };
     numbersContainer.appendChild(viewResultBtn);
 }
+
+/* --- Winning Number Lookup --- */
+const roundInput = document.getElementById('round-input');
+const lookupBtn = document.getElementById('lookup-btn');
+const prevRoundBtn = document.getElementById('prev-round-btn');
+const nextRoundBtn = document.getElementById('next-round-btn');
+const winningResult = document.getElementById('winning-result');
+
+// Set default round to last drawn
+if (roundInput) roundInput.value = getLastDrawnRound();
+
+async function fetchLottoResult(drwNo) {
+    const url = `https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=${drwNo}`;
+    const response = await fetch(url);
+    return response.json();
+}
+
+function formatPrize(amount) {
+    if (amount >= 100000000) return Math.floor(amount / 100000000) + '억 ' + (Math.floor((amount % 100000000) / 10000) > 0 ? Math.floor((amount % 100000000) / 10000) + '만원' : '원');
+    if (amount >= 10000) return Math.floor(amount / 10000) + '만원';
+    return amount.toLocaleString() + '원';
+}
+
+function renderWinningBall(number, isBonus) {
+    const ball = document.createElement('div');
+    ball.className = 'number' + (isBonus ? ' bonus' : '');
+    ball.textContent = number;
+    ball.style.animation = 'appear 0.5s ease backwards';
+    return ball;
+}
+
+function renderWinningResult(data) {
+    if (!data || data.returnValue !== 'success') {
+        winningResult.innerHTML = '<p class="lookup-error">해당 회차의 정보를 찾을 수 없습니다.</p>';
+        return;
+    }
+
+    const numbers = [data.drwtNo1, data.drwtNo2, data.drwtNo3, data.drwtNo4, data.drwtNo5, data.drwtNo6];
+    const bonus = data.bnusNo;
+
+    const numbersDiv = document.createElement('div');
+    numbersDiv.className = 'winning-numbers';
+    numbers.forEach((n, i) => {
+        const ball = renderWinningBall(n, false);
+        ball.style.animationDelay = `${i * 0.1}s`;
+        numbersDiv.appendChild(ball);
+    });
+
+    const plus = document.createElement('div');
+    plus.className = 'plus-sign';
+    plus.textContent = '+';
+    numbersDiv.appendChild(plus);
+
+    const bonusBall = renderWinningBall(bonus, true);
+    bonusBall.style.animationDelay = '0.6s';
+    numbersDiv.appendChild(bonusBall);
+
+    winningResult.innerHTML = '';
+    winningResult.innerHTML = `<p class="winning-round-title">제 ${data.drwNo}회 당첨번호 (${data.drwNoDate})</p>`;
+    winningResult.appendChild(numbersDiv);
+
+    if (data.firstWinamnt) {
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'winning-info';
+        infoDiv.innerHTML = `
+            <div class="winning-info-row">
+                <span class="winning-info-label">1등 당첨금</span>
+                <span class="winning-info-value">${formatPrize(data.firstWinamnt)}</span>
+            </div>
+            <div class="winning-info-row">
+                <span class="winning-info-label">1등 당첨자 수</span>
+                <span class="winning-info-value">${data.firstPrzwnerCo}명</span>
+            </div>
+            <div class="winning-info-row">
+                <span class="winning-info-label">추첨일</span>
+                <span class="winning-info-value">${data.drwNoDate}</span>
+            </div>
+        `;
+        winningResult.appendChild(infoDiv);
+    }
+}
+
+async function lookupRound() {
+    const drwNo = parseInt(roundInput.value);
+    if (!drwNo || drwNo < 1) {
+        winningResult.innerHTML = '<p class="lookup-error">올바른 회차를 입력해주세요.</p>';
+        return;
+    }
+    if (drwNo > getLastDrawnRound()) {
+        winningResult.innerHTML = '<p class="lookup-error">아직 추첨되지 않은 회차입니다.</p>';
+        return;
+    }
+
+    winningResult.innerHTML = '<p class="lookup-loading">조회 중...</p>';
+    lookupBtn.disabled = true;
+
+    try {
+        const data = await fetchLottoResult(drwNo);
+        renderWinningResult(data);
+    } catch (e) {
+        winningResult.innerHTML = '<p class="lookup-error">조회에 실패했습니다. 잠시 후 다시 시도해주세요.</p>';
+    } finally {
+        lookupBtn.disabled = false;
+    }
+}
+
+if (lookupBtn) lookupBtn.addEventListener('click', lookupRound);
+
+if (roundInput) roundInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') lookupRound();
+});
+
+if (prevRoundBtn) prevRoundBtn.addEventListener('click', () => {
+    const val = parseInt(roundInput.value) || getLastDrawnRound();
+    if (val > 1) {
+        roundInput.value = val - 1;
+        lookupRound();
+    }
+});
+
+if (nextRoundBtn) nextRoundBtn.addEventListener('click', () => {
+    const val = parseInt(roundInput.value) || 0;
+    if (val < getLastDrawnRound()) {
+        roundInput.value = val + 1;
+        lookupRound();
+    }
+});

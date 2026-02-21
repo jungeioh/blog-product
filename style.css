@@ -498,6 +498,143 @@
         100% { top: 100%; opacity: 0; }
     }
 
+    /* --- Winning Number Lookup --- */
+    .winning-lookup {
+        text-align: center;
+    }
+
+    .winning-lookup h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1.5rem;
+        color: var(--color-primary);
+    }
+
+    .lookup-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    #round-input {
+        width: 80px;
+        padding: 0.6rem 0.5rem;
+        border: 1px solid var(--container-border);
+        border-radius: 10px;
+        background: var(--container-bg);
+        color: var(--color-text);
+        font-size: 1.1rem;
+        text-align: center;
+        min-height: 44px;
+        box-sizing: border-box;
+        -moz-appearance: textfield;
+    }
+
+    #round-input::-webkit-outer-spin-button,
+    #round-input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .round-nav-btn {
+        background: none;
+        border: 1px solid var(--container-border);
+        color: var(--color-text);
+        font-size: 1.1rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 10px;
+        cursor: pointer;
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .round-nav-btn:hover {
+        background: var(--container-border);
+    }
+
+    #lookup-btn {
+        font-family: var(--font-body);
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+        border: none;
+        border-radius: 50px;
+        background-color: var(--color-primary);
+        color: white;
+        cursor: pointer;
+        min-height: 44px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px var(--color-primary);
+    }
+
+    #lookup-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px var(--color-primary);
+    }
+
+    #winning-result {
+        min-height: 100px;
+    }
+
+    .winning-numbers {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+    }
+
+    .winning-info {
+        background: var(--container-bg);
+        border: 1px solid var(--container-border);
+        border-radius: 12px;
+        padding: 1rem;
+        text-align: left;
+    }
+
+    .winning-info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--container-border);
+        font-size: 0.95rem;
+    }
+
+    .winning-info-row:last-child {
+        border-bottom: none;
+    }
+
+    .winning-info-label {
+        opacity: 0.7;
+    }
+
+    .winning-info-value {
+        font-weight: bold;
+        color: var(--color-primary);
+    }
+
+    .winning-round-title {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        opacity: 0.9;
+    }
+
+    .lookup-error {
+        color: oklch(70% 0.2 25);
+        padding: 1rem;
+        opacity: 0.8;
+    }
+
+    .lookup-loading {
+        padding: 2rem;
+        opacity: 0.6;
+    }
+
     /* --- Responsive Breakpoints --- */
 
     /* All small screens */
@@ -631,6 +768,16 @@
 
         .camera-view {
             height: min(40vh, 240px);
+        }
+
+        .winning-numbers {
+            gap: 0.25rem;
+        }
+
+        .winning-numbers .number {
+            width: 32px;
+            height: 32px;
+            font-size: 0.8rem;
         }
     }
 
