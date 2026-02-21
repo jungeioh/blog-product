@@ -25,10 +25,32 @@
 
         <div id="lotto-section" class="content-section active">
             <div id="numbers-container"></div>
-            <button id="generate-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                번호 추천
-            </button>
+            
+            <div class="button-group">
+                <button id="generate-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    일반 추천
+                </button>
+                <button id="face-btn" class="secondary-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                    관상 추천
+                </button>
+            </div>
+        </div>
+
+        <!-- Camera Modal -->
+        <div id="camera-modal" class="modal hidden">
+            <div class="modal-content">
+                <span id="close-camera">&times;</span>
+                <h3>관상 분석</h3>
+                <div class="camera-view">
+                    <video id="video" autoplay playsinline></video>
+                    <canvas id="canvas" style="display:none;"></canvas>
+                    <div class="scan-line"></div>
+                </div>
+                <p id="camera-status">얼굴을 화면에 맞춰주세요</p>
+                <button id="capture-btn">촬영 및 분석</button>
+            </div>
         </div>
 
         <section id="inquiry-section" class="content-section">
