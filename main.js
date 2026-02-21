@@ -96,6 +96,28 @@ function getNumberColor(number) {
 // Initial generation
 generateLottoRows();
 
+// Tab Switching Logic
+const navBtns = document.querySelectorAll('.nav-btn');
+const sections = document.querySelectorAll('.content-section');
+
+navBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+        
+        // Update Buttons
+        navBtns.forEach(nb => nb.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Update Sections
+        sections.forEach(section => {
+            section.classList.remove('active');
+            if (section.id === targetId) {
+                section.classList.add('active');
+            }
+        });
+    });
+});
+
 // Form Submission handling (UX improvement)
 const inquiryForm = document.getElementById('inquiry-form');
 inquiryForm.addEventListener('submit', (e) => {

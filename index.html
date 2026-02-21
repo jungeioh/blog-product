@@ -13,27 +13,39 @@
             <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
         <h1>로또 번호 추천기</h1>
-        <div id="numbers-container"></div>
-        <button id="generate-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-            번호 추천
-        </button>
 
-        <div class="divider"></div>
+        <nav class="main-nav">
+            <button class="nav-btn active" data-target="lotto-section">번호 추천</button>
+            <button class="nav-btn" data-target="inquiry-section">제휴 문의</button>
+        </nav>
 
-        <section class="inquiry-section">
-            <h2>제휴 문의</h2>
+        <div id="lotto-section" class="content-section active">
+            <div id="numbers-container"></div>
+            <button id="generate-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                번호 추천
+            </button>
+        </div>
+
+        <section id="inquiry-section" class="content-section">
+            <div class="inquiry-header">
+                <h2>비즈니스 제휴 문의</h2>
+                <p>로또 추천기와의 다양한 협력 기회를 기다립니다.</p>
+            </div>
             <form action="https://formspree.io/f/mdalweyd" method="POST" id="inquiry-form">
                 <div class="form-group">
-                    <input type="text" name="name" placeholder="성함/업체명" required>
+                    <label>성함/업체명</label>
+                    <input type="text" name="name" placeholder="예: 홍길동 (주식회사 로또)" required>
                 </div>
                 <div class="form-group">
-                    <input type="email" name="email" placeholder="이메일 주소" required>
+                    <label>이메일 주소</label>
+                    <input type="email" name="email" placeholder="contact@example.com" required>
                 </div>
                 <div class="form-group">
-                    <textarea name="message" rows="3" placeholder="문의 내용을 입력해주세요" required></textarea>
+                    <label>문의 내용</label>
+                    <textarea name="message" rows="5" placeholder="제휴 제안서 또는 문의 내용을 상세히 적어주세요." required></textarea>
                 </div>
-                <button type="submit" id="submit-btn">보내기</button>
+                <button type="submit" id="submit-btn">제안 전송하기</button>
             </form>
         </section>
     </div>
