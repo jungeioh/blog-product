@@ -60,30 +60,42 @@ function updateThemeIcons(theme) {
 }
 
 const blessingText = document.getElementById('blessing-text');
-const blessingMessages = [
-  "❝ 필시 1등이 될 상이네. 대박 나시게나! ❞",
-  "❝ 재물운이 미간에 훤히 빛나고 있네. 꽉 잡으시게! ❞",
-  "❝ 천기를 누설하는 것이니, 아무에게도 말하지 마시게. ❞",
-  "❝ 이번 주엔 귀인을 만날 상이야. 이 번호를 믿어보시게. ❞",
-  "❝ 음... 오늘은 기운이 탁하네. 이번엔 가볍게만 하시게나. ❞"
-];
+const blessingMessages = {
+    good: [
+        "❝ 필시 1등이 될 상이네. 대박 나시게나! ❞",
+        "❝ 재물운이 미간에 훤히 빛나고 있네. 꽉 잡으시게! ❞"
+    ],
+    normal: [
+        "❝ 천기를 누설하는 것이니, 아무에게도 말하지 마시게. ❞",
+        "❝ 이번 주엔 귀인을 만날 상이야. 이 번호를 믿어보시게. ❞"
+    ],
+    bad: [
+        "❝ 음... 오늘은 기운이 탁하네. 이번엔 가볍게만 하시게나. ❞"
+    ]
+};
 
-const showBlessing = () => {
-    if (blessingText) {
-        // Change text randomly
-        const randomIndex = Math.floor(Math.random() * blessingMessages.length);
-        blessingText.textContent = blessingMessages[randomIndex];
+const showBlessing = (luckLevel = null) => {
+    if (!blessingText) return;
 
+    if (!luckLevel) {
+        // Hide if no luck level (General Recommendation)
         blessingText.classList.remove('show');
-        // Trigger reflow to restart animation
-        void blessingText.offsetWidth; 
-        blessingText.classList.add('show');
+        return;
     }
+
+    // Select message based on luck level
+    const messages = blessingMessages[luckLevel];
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    blessingText.textContent = messages[randomIndex];
+
+    blessingText.classList.remove('show');
+    void blessingText.offsetWidth; // Trigger reflow
+    blessingText.classList.add('show');
 };
 
 generateBtn.addEventListener('click', () => {
     generateLottoRows();
-    showBlessing();
+    showBlessing(null); // Hide blessing text
 });
 
 function generateLottoRows() {
@@ -237,7 +249,7 @@ captureBtn.addEventListener('click', () => {
         
         setTimeout(() => {
             generateFaceLottoRows(pixelSum);
-            showBlessing(); // Added this to show the text
+            showBlessing(reading.luckLevel); // Pass detected luck level
             numbersContainer.scrollIntoView({ behavior: 'smooth' });
         }, 400);
     }, 3000);
@@ -247,10 +259,20 @@ function generateFaceReading(seed) {
     const wealthReadings = ["이마가 넓어 초년운이 좋으며...", "콧망울이 단단하여 재물이 쌓일 상...", "입술 끝이 올라가 복을 놓치지 않을 상...", "눈매가 깊어 횡재수가 따를 상..."];
     const personalityReadings = ["리더의 기질이 있습니다.", "귀인의 도움을 받을 성격입니다.", "인내심이 강한 우직함이 돋보입니다.", "예술적인 감각이 뛰어납니다."];
     const luckReadings = ["큰 행운이 찾아올 시기입니다.", "자신의 분야에서 이름을 알릴 운명입니다.", "말년까지 평안한 복을 누릴 상입니다.", "안정적인 성공 가도를 달릴 것입니다."];
+    
+    // Logic to determine luck level (good, normal, bad)
+    // We'll use the seed to pick a level
+    const levelIndex = seed % 10;
+    let luckLevel = "normal";
+    if (levelIndex > 6) luckLevel = "good";      // 30% chance for good
+    else if (levelIndex < 2) luckLevel = "bad";  // 20% chance for bad
+    else luckLevel = "normal";                   // 50% chance for normal
+
     return {
         wealth: wealthReadings[seed % wealthReadings.length],
         personality: personalityReadings[(seed + 7) % personalityReadings.length],
-        luck: luckReadings[(seed + 13) % luckReadings.length]
+        luck: luckReadings[(seed + 13) % luckReadings.length],
+        luckLevel: luckLevel
     };
 }
 
