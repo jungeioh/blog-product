@@ -134,10 +134,10 @@ function displayNumbers(mainNumbers, bonusNumber, rowIndex) {
     const plusEl = document.createElement('div');
     plusEl.classList.add('plus-sign');
     plusEl.textContent = '+';
-    plusEl.style.animationDelay = `${rowIndex * 0.2 + 0.6}s`;
+    plusEl.style.animationDelay = `${rowIndex * 0.4 + 6 * 0.2}s`;
     rowEl.appendChild(plusEl);
 
-    const bonusEl = createNumberElement(bonusNumber, rowIndex, 6, true);
+    const bonusEl = createNumberElement(bonusNumber, rowIndex, 7, true);
     rowEl.appendChild(bonusEl);
 
     numbersContainer.appendChild(rowEl);
@@ -148,7 +148,7 @@ function createNumberElement(number, rowIndex, index, isBonus = false) {
     numberEl.classList.add('number');
     if (isBonus) numberEl.classList.add('bonus');
     numberEl.textContent = number;
-    numberEl.style.animationDelay = `${rowIndex * 0.2 + index * 0.1}s`;
+    numberEl.style.animationDelay = `${rowIndex * 0.4 + index * 0.2}s`;
     return numberEl;
 }
 
@@ -357,7 +357,7 @@ function renderWinningBall(number, isBonus) {
     const ball = document.createElement('div');
     ball.className = 'number' + (isBonus ? ' bonus' : '');
     ball.textContent = number;
-    ball.style.animation = 'appear 0.5s ease backwards';
+    ball.style.animation = 'ballAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards';
     return ball;
 }
 
@@ -374,17 +374,18 @@ function renderWinningResult(data) {
     numbersDiv.className = 'winning-numbers';
     numbers.forEach((n, i) => {
         const ball = renderWinningBall(n, false);
-        ball.style.animationDelay = `${i * 0.1}s`;
+        ball.style.animationDelay = `${i * 0.2}s`;
         numbersDiv.appendChild(ball);
     });
 
     const plus = document.createElement('div');
     plus.className = 'plus-sign';
     plus.textContent = '+';
+    plus.style.animationDelay = `${6 * 0.2}s`;
     numbersDiv.appendChild(plus);
 
     const bonusBall = renderWinningBall(bonus, true);
-    bonusBall.style.animationDelay = '0.6s';
+    bonusBall.style.animationDelay = `${7 * 0.2}s`;
     numbersDiv.appendChild(bonusBall);
 
     winningResult.innerHTML = '';
