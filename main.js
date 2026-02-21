@@ -59,8 +59,20 @@ function updateThemeIcons(theme) {
     }
 }
 
+const blessingText = document.getElementById('blessing-text');
+
+const showBlessing = () => {
+    if (blessingText) {
+        blessingText.classList.remove('show');
+        // Trigger reflow to restart animation
+        void blessingText.offsetWidth; 
+        blessingText.classList.add('show');
+    }
+};
+
 generateBtn.addEventListener('click', () => {
     generateLottoRows();
+    showBlessing();
 });
 
 function generateLottoRows() {
@@ -214,6 +226,7 @@ captureBtn.addEventListener('click', () => {
         
         setTimeout(() => {
             generateFaceLottoRows(pixelSum);
+            showBlessing(); // Added this to show the text
             numbersContainer.scrollIntoView({ behavior: 'smooth' });
         }, 400);
     }, 3000);
