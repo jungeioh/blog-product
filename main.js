@@ -1,4 +1,20 @@
 /* main.js - 대박 로또 with Theme Support and Bonus Numbers */
+
+// Splash Screen Removal Logic
+window.addEventListener('load', () => {
+    const splash = document.getElementById('splash-screen');
+    
+    // Hold for 3 seconds total (1.5s fade-in + 1.5s display)
+    setTimeout(() => {
+        splash.classList.add('fade-out');
+        
+        // Fully remove from DOM after fade-out transition completes (1.5s)
+        setTimeout(() => {
+            splash.style.display = 'none';
+        }, 1500);
+    }, 3000);
+});
+
 const generateBtn = document.getElementById('generate-btn');
 const numbersContainer = document.getElementById('numbers-container');
 const themeToggle = document.getElementById('theme-toggle');
