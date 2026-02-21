@@ -240,4 +240,31 @@
         color: white;
         box-shadow: 0 0 15px var(--color-primary);
     }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 600px) {
+        .container {
+            padding: 2rem 1rem;
+            width: 90vw;
+            margin: 0 auto;
+        }
+
+        .number {
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+        }
+
+        .number-row {
+            gap: 0.5rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+        }
+
+        .inquiry-section h2 {
+            font-size: 1.2rem;
+        }
+    }
 }
