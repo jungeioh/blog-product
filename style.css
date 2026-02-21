@@ -32,6 +32,9 @@
         min-height: 100vh;
         transition: background-color 0.3s ease, color 0.3s ease;
         padding: 2rem 0;
+        padding-left: env(safe-area-inset-left, 0px);
+        padding-right: env(safe-area-inset-right, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     body::before {
@@ -84,25 +87,29 @@
         border: 1px solid var(--container-border);
         box-shadow: 0 10px 30px var(--shadow-color), 0 0 0 1px oklch(70% 0.2 260 / 0.1);
         transition: background-color 0.3s ease, border-color 0.3s ease;
-        opacity: 1 !important; /* Force visible */
+        opacity: 1 !important;
         visibility: visible !important;
         z-index: 1;
+        overflow-x: hidden;
+        box-sizing: border-box;
     }
 
     #theme-toggle {
         position: absolute;
-        top: 1rem;
-        right: 1rem;
+        top: 0.75rem;
+        right: 0.75rem;
         background: none;
         border: 1px solid var(--container-border);
         color: var(--color-text);
-        padding: 0.5rem;
+        padding: 0.75rem;
         border-radius: 50%;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: all 0.2s ease;
+        min-width: 44px;
+        min-height: 44px;
     }
 
     #theme-toggle:hover {
@@ -144,6 +151,8 @@
         display: flex;
         justify-content: center;
         gap: 1rem;
+        flex-wrap: nowrap;
+        max-width: 100%;
     }
 
     .number {
@@ -207,7 +216,7 @@
     #generate-btn, #face-btn, #capture-btn {
         font-family: var(--font-body);
         font-size: 1.1rem;
-        padding: 0.8rem 1.5rem;
+        padding: 0.85rem 1.5rem;
         border: none;
         border-radius: 50px;
         background-color: var(--color-primary);
@@ -219,6 +228,7 @@
         transition: all 0.3s ease;
         box-shadow: 0 0 15px var(--color-primary);
         justify-content: center;
+        min-height: 44px;
     }
 
     .button-group {
@@ -265,13 +275,14 @@
         background: none;
         border: none;
         color: var(--color-text);
-        padding: 0.5rem 1rem;
+        padding: 0.75rem 1rem;
         font-family: var(--font-display);
         font-size: 1rem;
         cursor: pointer;
         opacity: 0.6;
         transition: all 0.3s ease;
         position: relative;
+        min-height: 44px;
     }
 
     .nav-btn.active {
@@ -363,13 +374,14 @@
         background: none;
         border: 1px solid var(--color-primary);
         color: var(--color-primary);
-        padding: 0.6rem 1.2rem;
+        padding: 0.75rem 1.2rem;
         border-radius: 50px;
         font-family: var(--font-body);
         font-size: 0.9rem;
         cursor: pointer;
         transition: all 0.3s ease;
         display: inline-block;
+        min-height: 44px;
     }
 
     .view-result-btn:hover {
@@ -409,6 +421,9 @@
         backdrop-filter: blur(5px);
         align-items: center;
         justify-content: center;
+        padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
+                 env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+        box-sizing: border-box;
     }
 
     .modal.show {
@@ -429,18 +444,25 @@
 
     #close-camera {
         position: absolute;
-        top: 10px;
-        right: 20px;
+        top: 8px;
+        right: 8px;
         color: var(--color-text);
-        font-size: 28px;
+        font-size: 24px;
         font-weight: bold;
         cursor: pointer;
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: background-color 0.2s ease;
     }
 
     .camera-view {
         width: 100%;
         max-width: 400px;
-        height: 300px;
+        height: min(50vh, 300px);
         margin: 1rem auto;
         background: black;
         border-radius: 12px;
@@ -476,12 +498,173 @@
         100% { top: 100%; opacity: 0; }
     }
 
+    /* --- Responsive Breakpoints --- */
+
+    /* All small screens */
     @media (max-width: 600px) {
         .container {
-            padding: 2rem 1rem;
+            padding: 2rem 0.75rem;
             width: 95vw;
+            border-radius: 14px;
         }
-        .number { width: 45px; height: 45px; font-size: 1rem; }
+
+        .number {
+            width: 38px;
+            height: 38px;
+            font-size: 0.9rem;
+        }
+
+        .number-row {
+            gap: 0.4rem;
+        }
+
+        .plus-sign {
+            font-size: 1.1rem;
+        }
+
+        #numbers-container {
+            gap: 1rem;
+        }
+
+        #blessing-text {
+            font-size: 1.4rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .round-info {
+            font-size: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .main-nav {
+            gap: 0.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .analysis-container {
+            padding: 1.2rem;
+            gap: 1rem;
+        }
+
+        .modal-content {
+            padding: 1.2rem;
+            width: 95%;
+            border-radius: 14px;
+        }
+
+        .camera-view {
+            height: min(50vh, 300px);
+        }
+
+        #camera-status {
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Mid-range phones (375px - 428px) */
+    @media (min-width: 375px) and (max-width: 428px) {
+        .number {
+            width: 36px;
+            height: 36px;
+            font-size: 0.85rem;
+        }
+
+        .number-row {
+            gap: 0.35rem;
+        }
+
+        .container {
+            padding: 2rem 0.75rem;
+            width: 96vw;
+        }
+    }
+
+    /* Very small screens (320px devices) */
+    @media (max-width: 374px) {
+        .container {
+            padding: 1.5rem 0.5rem;
+            width: 98vw;
+        }
+
+        .number {
+            width: 32px;
+            height: 32px;
+            font-size: 0.8rem;
+        }
+
+        .number-row {
+            gap: 0.25rem;
+        }
+
+        .plus-sign {
+            font-size: 0.9rem;
+        }
+
+        h1 {
+            margin-bottom: 0.3rem;
+        }
+
+        .main-nav {
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .nav-btn.active::after {
+            bottom: -0.75rem;
+        }
+
+        .button-group {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        #generate-btn, #face-btn {
+            width: 100%;
+        }
+
+        .modal-content {
+            width: 98%;
+            padding: 1rem 0.75rem;
+        }
+
+        .camera-view {
+            height: min(40vh, 240px);
+        }
+    }
+
+    /* --- Touch Feedback (touch devices only) --- */
+    @media (hover: none) {
+        #theme-toggle:active {
+            background: var(--container-border);
+            transform: scale(0.9);
+        }
+
+        #generate-btn:active, #capture-btn:active {
+            transform: scale(0.95);
+            filter: brightness(0.85);
+        }
+
+        #face-btn:active {
+            transform: scale(0.95);
+            filter: brightness(0.85);
+        }
+
+        .nav-btn:active {
+            opacity: 1;
+            transform: scale(0.97);
+        }
+
+        .view-result-btn:active {
+            background: var(--color-primary);
+            color: white;
+            transform: scale(0.97);
+        }
+
+        #close-camera:active {
+            background: oklch(50% 0 0 / 0.2);
+        }
     }
 }
 
