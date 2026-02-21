@@ -13,7 +13,6 @@ const hideSplash = () => {
 };
 
 setTimeout(hideSplash, 3000);
-window.addEventListener('load', hideSplash);
 
 const generateBtn = document.getElementById('generate-btn');
 const numbersContainer = document.getElementById('numbers-container');
