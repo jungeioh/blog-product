@@ -735,22 +735,22 @@ if (privacyModal) {
     });
 }
 
-/* --- Secret Long-Press Reset (제목 5초 꾹 누르기) --- */
+/* --- Secret Long-Press Reset (테마 버튼 3초 꾹 누르기) --- */
 (function() {
-    const titleEl = document.querySelector('.container > h1');
+    const themeBtn = document.getElementById('theme-toggle');
     let holdTimer = null;
 
     function startHold(e) {
         if (e.type === 'touchstart') e.preventDefault();
         if (holdTimer) return;
-        titleEl.classList.add('hold-active');
+        themeBtn.classList.add('hold-active');
         holdTimer = setTimeout(() => {
             localStorage.removeItem('lottoWeekly');
             localStorage.setItem(ADMIN_KEY, 'true');
-            titleEl.classList.remove('hold-active');
+            themeBtn.classList.remove('hold-active');
             alert('관리자 권한으로 주간 기운이 충전되었습니다!');
             location.reload();
-        }, 5000);
+        }, 3000);
     }
 
     function cancelHold() {
@@ -758,12 +758,12 @@ if (privacyModal) {
             clearTimeout(holdTimer);
             holdTimer = null;
         }
-        titleEl.classList.remove('hold-active');
+        themeBtn.classList.remove('hold-active');
     }
 
-    titleEl.addEventListener('touchstart', startHold, { passive: false });
-    titleEl.addEventListener('touchend', cancelHold);
-    titleEl.addEventListener('touchcancel', cancelHold);
-    titleEl.addEventListener('mousedown', startHold);
+    themeBtn.addEventListener('touchstart', startHold, { passive: false });
+    themeBtn.addEventListener('touchend', cancelHold);
+    themeBtn.addEventListener('touchcancel', cancelHold);
+    themeBtn.addEventListener('mousedown', startHold);
     document.addEventListener('mouseup', cancelHold);
 })();
