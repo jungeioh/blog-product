@@ -735,82 +735,35 @@ if (privacyModal) {
     });
 }
 
-/* --- Secret Dual-Hold Reset (일반추천 + 관상추천 동시 3초 홀드) --- */
+/* --- Secret Long-Press Reset (제목 5초 꾹 누르기) --- */
 (function() {
-    let resetTimer = null;
+    const titleEl = document.querySelector('.container > h1');
+    let holdTimer = null;
 
-    function isTouchOnBtn(touch, btn) {
-        const el = document.elementFromPoint(touch.clientX, touch.clientY);
-        return el && (el === btn || btn.contains(el));
-    }
-
-    function checkTouches(e) {
-        let onGenerate = false, onFace = false;
-        for (let i = 0; i < e.touches.length; i++) {
-            if (isTouchOnBtn(e.touches[i], generateBtn)) onGenerate = true;
-            if (isTouchOnBtn(e.touches[i], faceBtn)) onFace = true;
-        }
-        if (onGenerate && onFace) {
-            if (!resetTimer) {
-                generateBtn.classList.add('hold-active');
-                faceBtn.classList.add('hold-active');
-                resetTimer = setTimeout(() => {
-                    localStorage.removeItem('lottoWeekly');
-                    localStorage.setItem(ADMIN_KEY, 'true');
-                    generateBtn.classList.remove('hold-active');
-                    faceBtn.classList.remove('hold-active');
-                    alert('관리자 권한으로 주간 기운이 충전되었습니다!');
-                    location.reload();
-                }, 3000);
-            }
-        } else {
-            cancelHold();
-        }
+    function startHold(e) {
+        if (e.type === 'touchstart') e.preventDefault();
+        if (holdTimer) return;
+        titleEl.classList.add('hold-active');
+        holdTimer = setTimeout(() => {
+            localStorage.removeItem('lottoWeekly');
+            localStorage.setItem(ADMIN_KEY, 'true');
+            titleEl.classList.remove('hold-active');
+            alert('관리자 권한으로 주간 기운이 충전되었습니다!');
+            location.reload();
+        }, 5000);
     }
 
     function cancelHold() {
-        if (resetTimer) {
-            clearTimeout(resetTimer);
-            resetTimer = null;
+        if (holdTimer) {
+            clearTimeout(holdTimer);
+            holdTimer = null;
         }
-        generateBtn.classList.remove('hold-active');
-        faceBtn.classList.remove('hold-active');
+        titleEl.classList.remove('hold-active');
     }
 
-    // 모바일: document 레벨 멀티터치 감지
-    document.addEventListener('touchstart', checkTouches, { passive: true });
-    document.addEventListener('touchend', checkTouches, { passive: true });
-    document.addEventListener('touchcancel', cancelHold, { passive: true });
-
-    // PC: 마우스 (Ctrl+클릭 등으로는 동시 누르기 불가 → 마우스는 생략하거나 별도 처리)
-    let mouseGeneral = false, mouseFace = false;
-
-    generateBtn.addEventListener('mousedown', () => {
-        mouseGeneral = true;
-        if (mouseGeneral && mouseFace) startMouseHold();
-    });
-    faceBtn.addEventListener('mousedown', () => {
-        mouseFace = true;
-        if (mouseGeneral && mouseFace) startMouseHold();
-    });
-    document.addEventListener('mouseup', () => {
-        mouseGeneral = false;
-        mouseFace = false;
-        cancelHold();
-    });
-
-    function startMouseHold() {
-        if (!resetTimer) {
-            generateBtn.classList.add('hold-active');
-            faceBtn.classList.add('hold-active');
-            resetTimer = setTimeout(() => {
-                localStorage.removeItem('lottoWeekly');
-                localStorage.setItem(ADMIN_KEY, 'true');
-                generateBtn.classList.remove('hold-active');
-                faceBtn.classList.remove('hold-active');
-                alert('관리자 권한으로 주간 기운이 충전되었습니다!');
-                location.reload();
-            }, 3000);
-        }
-    }
+    titleEl.addEventListener('touchstart', startHold, { passive: false });
+    titleEl.addEventListener('touchend', cancelHold);
+    titleEl.addEventListener('touchcancel', cancelHold);
+    titleEl.addEventListener('mousedown', startHold);
+    document.addEventListener('mouseup', cancelHold);
 })();
