@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- cache-bust: 2026-02-22-v2 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://jungeioh.github.io/lottobok/</loc>
-    <lastmod>2026-02-22</lastmod>
-    <priority>1.0</priority>
+    <lastmod>2026-02-22T12:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
 </urlset>
