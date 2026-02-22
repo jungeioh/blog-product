@@ -830,6 +830,88 @@
             background: oklch(50% 0 0 / 0.2);
         }
     }
+
+    /* --- 정보성 텍스트 --- */
+    .info-text {
+        margin-top: 2.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.13);
+        font-size: 0.9rem;
+        line-height: 1.8;
+        color: rgba(255, 215, 0, 0.45);
+        text-align: left;
+    }
+
+    .info-text p {
+        margin: 0 0 0.8rem 0;
+    }
+
+    .info-text p:last-child {
+        margin-bottom: 0;
+    }
+
+    [data-theme="light"] .info-text {
+        color: rgba(100, 80, 40, 0.55);
+        border-top-color: rgba(0, 0, 0, 0.08);
+    }
+
+    /* --- Footer --- */
+    .site-footer {
+        margin-top: 2rem;
+        padding-top: 1.2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.13);
+        text-align: center;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.35);
+    }
+
+    .site-footer p {
+        margin: 0.3rem 0;
+    }
+
+    .site-footer a {
+        color: rgba(255, 215, 0, 0.5);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .site-footer a:hover {
+        color: #FFD700;
+    }
+
+    [data-theme="light"] .site-footer {
+        color: rgba(0, 0, 0, 0.35);
+        border-top-color: rgba(0, 0, 0, 0.08);
+    }
+
+    [data-theme="light"] .site-footer a {
+        color: rgba(100, 80, 40, 0.6);
+    }
+
+    [data-theme="light"] .site-footer a:hover {
+        color: #8B6914;
+    }
+
+    /* --- Privacy Modal --- */
+    .privacy-modal-content {
+        text-align: left;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .privacy-body {
+        font-size: 0.9rem;
+        line-height: 1.7;
+        opacity: 0.85;
+    }
+
+    .privacy-body p {
+        margin: 0 0 1rem 0;
+    }
+
+    .privacy-body a {
+        color: var(--color-primary);
+    }
 }
 
 /* Splash Overlay Styles */
