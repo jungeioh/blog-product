@@ -333,7 +333,6 @@ const scanLine = document.querySelector('.scan-line');
 let stream = null;
 
 faceBtn.addEventListener('click', async () => {
-    if (!checkWeeklyLimit()) return;
     try {
         cameraStatus.textContent = "카메라를 준비하고 있습니다...";
         const constraints = {
