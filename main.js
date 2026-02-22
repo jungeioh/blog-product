@@ -112,7 +112,12 @@ if (roundEl) roundEl.textContent = `${currentRound}회`;
 
 // --- Weekly Usage Limit (5회/주, 매주 월요일 리셋) ---
 const WEEKLY_MAX = 5;
+const ADMIN_KEY = 'lottoAdmin';
 const weeklyLimitEl = document.getElementById('weekly-limit');
+
+function isAdmin() {
+    return localStorage.getItem(ADMIN_KEY) === 'true';
+}
 
 function getWeekStart() {
     const now = new Date();
@@ -131,6 +136,7 @@ function getWeeklyUsage() {
 }
 
 function getRemainingUses() {
+    if (isAdmin()) return WEEKLY_MAX;
     const usage = getWeeklyUsage();
     const currentWeek = getWeekStart();
     if (usage.weekStart !== currentWeek) return WEEKLY_MAX;
@@ -138,6 +144,7 @@ function getRemainingUses() {
 }
 
 function incrementUsage() {
+    if (isAdmin()) return;
     const currentWeek = getWeekStart();
     const usage = getWeeklyUsage();
     if (usage.weekStart !== currentWeek) {
@@ -157,6 +164,11 @@ function getDaysUntilReset() {
 
 function updateLimitDisplay() {
     if (!weeklyLimitEl) return;
+    if (isAdmin()) {
+        weeklyLimitEl.className = 'weekly-limit';
+        weeklyLimitEl.innerHTML = '';
+        return;
+    }
     const remaining = getRemainingUses();
     if (remaining > 0) {
         weeklyLimitEl.className = 'weekly-limit';
