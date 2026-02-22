@@ -230,7 +230,7 @@ function showAnalysisLoading(callback) {
                 callback();
             }, 400);
         }
-    }, 500);
+    }, 1200);
 }
 
 // --- Generate Button ---
