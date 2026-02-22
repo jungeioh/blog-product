@@ -110,85 +110,6 @@ const currentRound = getCurrentRound();
 const roundEl = document.getElementById('current-round');
 if (roundEl) roundEl.textContent = `${currentRound}회`;
 
-// --- Weekly Usage Limit (5회/주, 매주 월요일 리셋) ---
-const WEEKLY_MAX = 5;
-const ADMIN_KEY = 'lottoAdmin';
-const weeklyLimitEl = document.getElementById('weekly-limit');
-
-function isAdmin() {
-    return localStorage.getItem(ADMIN_KEY) === 'true';
-}
-
-function getWeekStart() {
-    const now = new Date();
-    const day = now.getDay();
-    const diff = day === 0 ? 6 : day - 1;
-    const monday = new Date(now);
-    monday.setHours(0, 0, 0, 0);
-    monday.setDate(monday.getDate() - diff);
-    return monday.getTime();
-}
-
-function getWeeklyUsage() {
-    const raw = localStorage.getItem('lottoWeekly');
-    if (!raw) return { weekStart: 0, count: 0 };
-    try { return JSON.parse(raw); } catch { return { weekStart: 0, count: 0 }; }
-}
-
-function getRemainingUses() {
-    if (isAdmin()) return WEEKLY_MAX;
-    const usage = getWeeklyUsage();
-    const currentWeek = getWeekStart();
-    if (usage.weekStart !== currentWeek) return WEEKLY_MAX;
-    return Math.max(0, WEEKLY_MAX - usage.count);
-}
-
-function incrementUsage() {
-    if (isAdmin()) return;
-    const currentWeek = getWeekStart();
-    const usage = getWeeklyUsage();
-    if (usage.weekStart !== currentWeek) {
-        localStorage.setItem('lottoWeekly', JSON.stringify({ weekStart: currentWeek, count: 1 }));
-    } else {
-        usage.count++;
-        localStorage.setItem('lottoWeekly', JSON.stringify(usage));
-    }
-}
-
-function getDaysUntilReset() {
-    const now = new Date();
-    const day = now.getDay();
-    const daysLeft = day === 0 ? 1 : (8 - day);
-    return daysLeft;
-}
-
-function updateLimitDisplay() {
-    if (!weeklyLimitEl) return;
-    if (isAdmin()) {
-        weeklyLimitEl.className = 'weekly-limit';
-        weeklyLimitEl.innerHTML = '';
-        return;
-    }
-    const remaining = getRemainingUses();
-    if (remaining > 0) {
-        weeklyLimitEl.className = 'weekly-limit';
-        weeklyLimitEl.innerHTML = `이번 주 남은 천기누설: <b>${remaining}회</b>`;
-    } else {
-        const days = getDaysUntilReset();
-        weeklyLimitEl.className = 'weekly-limit exhausted';
-        weeklyLimitEl.innerHTML = `이번 주의 천기가 모두 소진되었습니다.<span class="days-left">다음 주 기운 충전까지 ${days}일 남음</span>`;
-        generateBtn.classList.add('btn-disabled');
-        faceBtn.classList.add('btn-disabled');
-    }
-}
-
-function checkWeeklyLimit() {
-    if (isAdmin()) return true;
-    if (getRemainingUses() <= 0) return false;
-    return true;
-}
-
-updateLimitDisplay();
 
 // Theme Logic
 const currentTheme = localStorage.getItem('theme') || 'dark';
@@ -316,12 +237,9 @@ function showAnalysisLoading(callback) {
 // --- Generate Button ---
 generateBtn.addEventListener('click', () => {
     if (generateBtn.classList.contains('btn-busy')) return;
-    if (!checkWeeklyLimit()) return;
     initAudio();
     generateBtn.classList.add('btn-busy');
     showBlessing(null);
-    incrementUsage();
-    updateLimitDisplay();
 
     showAnalysisLoading(() => {
         generateLottoRows();
@@ -734,18 +652,3 @@ if (privacyModal) {
     });
 }
 
-/* --- Secret Rapid Tap Reset (일반추천 7번 연속 터치/클릭) --- */
-(function() {
-    let tapCount = 0;
-
-    generateBtn.addEventListener('click', () => {
-        tapCount++;
-        if (tapCount >= 7) {
-            tapCount = 0;
-            localStorage.removeItem('lottoWeekly');
-            localStorage.setItem(ADMIN_KEY, 'true');
-            alert('관리자 권한으로 주간 기운이 충전되었습니다!');
-            location.reload();
-        }
-    });
-})();
