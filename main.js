@@ -177,16 +177,14 @@ function updateLimitDisplay() {
         const days = getDaysUntilReset();
         weeklyLimitEl.className = 'weekly-limit exhausted';
         weeklyLimitEl.innerHTML = `이번 주의 천기가 모두 소진되었습니다.<span class="days-left">다음 주 기운 충전까지 ${days}일 남음</span>`;
-        generateBtn.disabled = true;
-        faceBtn.disabled = true;
+        generateBtn.classList.add('btn-disabled');
+        faceBtn.classList.add('btn-disabled');
     }
 }
 
 function checkWeeklyLimit() {
-    if (getRemainingUses() <= 0) {
-        alert('이번 주에 허락된 5번의 천기를 모두 확인하셨습니다.\n\n기운이 다시 모이는 다음 주에 찾아오십시오.');
-        return false;
-    }
+    if (isAdmin()) return true;
+    if (getRemainingUses() <= 0) return false;
     return true;
 }
 
@@ -317,9 +315,10 @@ function showAnalysisLoading(callback) {
 
 // --- Generate Button ---
 generateBtn.addEventListener('click', () => {
+    if (generateBtn.classList.contains('btn-busy')) return;
     if (!checkWeeklyLimit()) return;
     initAudio();
-    generateBtn.disabled = true;
+    generateBtn.classList.add('btn-busy');
     showBlessing(null);
     incrementUsage();
     updateLimitDisplay();
@@ -327,7 +326,7 @@ generateBtn.addEventListener('click', () => {
     showAnalysisLoading(() => {
         generateLottoRows();
         scheduleBallSounds(5);
-        if (getRemainingUses() > 0) generateBtn.disabled = false;
+        generateBtn.classList.remove('btn-busy');
     });
 });
 
@@ -735,18 +734,14 @@ if (privacyModal) {
     });
 }
 
-/* --- Secret Rapid Click Reset (일반추천 7번 연속 클릭) --- */
+/* --- Secret Rapid Tap Reset (일반추천 7번 연속 터치/클릭) --- */
 (function() {
-    let clickCount = 0;
-    let resetTimer = null;
+    let tapCount = 0;
 
     generateBtn.addEventListener('click', () => {
-        clickCount++;
-        if (resetTimer) clearTimeout(resetTimer);
-        resetTimer = setTimeout(() => { clickCount = 0; }, 3000);
-        if (clickCount >= 7) {
-            clickCount = 0;
-            clearTimeout(resetTimer);
+        tapCount++;
+        if (tapCount >= 7) {
+            tapCount = 0;
             localStorage.removeItem('lottoWeekly');
             localStorage.setItem(ADMIN_KEY, 'true');
             alert('관리자 권한으로 주간 기운이 충전되었습니다!');

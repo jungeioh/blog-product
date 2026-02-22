@@ -374,6 +374,16 @@
         transform: rotate(360deg);
     }
 
+    .btn-disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .btn-busy {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
     .main-nav {
         display: flex;
         justify-content: center;
